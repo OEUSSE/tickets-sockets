@@ -1,0 +1,22 @@
+const express = require('express')
+const socketIO = require('socket.io')
+const http = require('http')
+const path = require('path')
+
+const app = express()
+const server = http.createServer(app)
+
+const publicPath = path.resolve(__dirname, '../public')
+const port = process.env.PORT || 3000
+
+app.use(express.static(publicPath))
+
+// io comunicación del backend
+module.exports.io = socketIO(server)
+require('./sockets/socket.js')
+
+server.listen(port, err => {
+    if (err) throw new Error('No fue posible arrancar el servidor: ', err)
+    
+    console.log('Servidor corriendo en el puerto', port)
+})
